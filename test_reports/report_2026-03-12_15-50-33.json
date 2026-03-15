@@ -1,0 +1,33 @@
+{
+  "scan_info": {
+    "timestamp": "2026-03-12_15-50-33",
+    "targets": [
+      "http://localhost:5000"
+    ],
+    "scan_duration": "Unknown"
+  },
+  "summary": {
+    "total_urls": 0,
+    "total_secrets": 0,
+    "total_api_endpoints": 0,
+    "total_auth_results": 0,
+    "total_idor_results": 0,
+    "total_jwt_results": 0
+  },
+  "results": {
+    "secrets": [],
+    "api_endpoints": [],
+    "auth_results": [],
+    "idor_results": [],
+    "jwt_results": []
+  },
+  "risk_assessment": {
+    "risk_distribution": {
+      "危急": 0,
+      "高危": 0,
+      "中危": 0,
+      "低危": 0,
+      "信息": 0
+    }
+  }
+}

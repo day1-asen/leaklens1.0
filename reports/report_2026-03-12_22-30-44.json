@@ -1,0 +1,53 @@
+{
+  "scan_info": {
+    "timestamp": "2026-03-12_22-30-44",
+    "targets": [
+      "http://example.com"
+    ],
+    "scan_duration": "Unknown"
+  },
+  "summary": {
+    "total_urls": 1,
+    "total_secrets": 0,
+    "total_api_endpoints": 1,
+    "total_auth_results": 0,
+    "total_idor_results": 0,
+    "total_jwt_results": 0
+  },
+  "results": {
+    "secrets": [],
+    "api_endpoints": [
+      {
+        "url": "http://example.com/domains/example",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "#eee;width:60vw;margin:15vh",
+            "value": ""
+          },
+          {
+            "name": "system-ui,sans-serif}h1{font-size:1.5em}div{opacity:0.8}a:link,a:visited{color:#348}</style></head><body><div><h1>Example",
+            "value": ""
+          },
+          {
+            "name": "//iana.org/domains/example",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "auth_results": [],
+    "idor_results": [],
+    "jwt_results": []
+  },
+  "risk_assessment": {
+    "risk_distribution": {
+      "危急": 0,
+      "高危": 0,
+      "中危": 0,
+      "低危": 0,
+      "信息": 0
+    }
+  }
+}

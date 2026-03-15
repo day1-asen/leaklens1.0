@@ -1,0 +1,1754 @@
+{
+  "scan_info": {
+    "timestamp": "2026-03-12_19-19-53",
+    "targets": [
+      "http://example.com"
+    ],
+    "scan_duration": "Unknown"
+  },
+  "summary": {
+    "total_urls": 2,
+    "total_secrets": 0,
+    "total_api_endpoints": 64,
+    "total_auth_results": 0,
+    "total_idor_results": 0,
+    "total_jwt_results": 0
+  },
+  "results": {
+    "secrets": [],
+    "api_endpoints": [
+      {
+        "url": "http://example.com/domains/example",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "#eee;width:60vw;margin:15vh",
+            "value": ""
+          },
+          {
+            "name": "system-ui,sans-serif}h1{font-size:1.5em}div{opacity:0.8}a:link,a:visited{color:#348}</style></head><body><div><h1>Example",
+            "value": ""
+          },
+          {
+            "name": "//iana.org/domains/example",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/protocols",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/numbers",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/about",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/go/rfc2606",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/go/rfc6761",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains/reserved",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains/root",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains/int",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains/arpa",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/numbers",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/abuse",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/protocols",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/protocols",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/about",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/news",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/performance",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/about/excellence",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/archive",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/contact",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/protocols",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/numbers",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/about",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/go/rfc2606",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/go/rfc6761",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains/reserved",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains/root",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains/int",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/domains/arpa",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/numbers",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/abuse",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/protocols",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/protocols",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/about",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/news",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/performance",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/about/excellence",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/archive",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/contact",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/html",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/_css/2025",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/iana_website",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/ico",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/_img/bookmark_icon",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/javascript",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/_js/jquery",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/javascript",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/_js/iana",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/_img/2025",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/iana",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/rfc2606",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/rfc6761",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/reserved",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/root",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/int",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/arpa",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/idn",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/excellence",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/privacy/policy",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "url": "https://iana.org/privacy/tos",
+        "method": "GET",
+        "source": "crawler",
+        "params": [
+          {
+            "name": "text/html",
+            "value": ""
+          },
+          {
+            "name": "//pti.icann.org",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/policy",
+            "value": ""
+          },
+          {
+            "name": "//www.icann.org/privacy/tos",
+            "value": ""
+          }
+        ]
+      }
+    ],
+    "auth_results": [],
+    "idor_results": [],
+    "jwt_results": []
+  },
+  "risk_assessment": {
+    "risk_distribution": {
+      "危急": 0,
+      "高危": 0,
+      "中危": 0,
+      "低危": 0,
+      "信息": 0
+    }
+  }
+}

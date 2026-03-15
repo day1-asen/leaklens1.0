@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeakLens - 敏感信息扫描工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .glass {
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- 头部 -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                <i class="fa fa-search text-primary mr-2"></i>LeakLens
+            </h1>
+            <p class="text-gray-600 text-lg">敏感信息扫描工具 - 发现网站中的安全隐患</p>
+        </header>
+
+        <!-- 扫描表单 -->
+        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+                <i class="fa fa-cogs text-primary mr-2"></i>扫描配置
+            </h2>
+            <form id="scanForm" class="space-y-4">
+                <div>
+                    <label for="url" class="block text-gray-700 font-medium mb-1">目标URL</label>
+                    <input type="url" id="url" name="url" placeholder="https://example.com" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="max_depth" class="block text-gray-700 font-medium mb-1">最大深度</label>
+                        <input type="number" id="max_depth" name="max_depth" value="1" min="1" max="5"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                    </div>
+                    <div>
+                        <label for="max_page" class="block text-gray-700 font-medium mb-1">最大页面数</label>
+                        <input type="number" id="max_page" name="max_page" value="100" min="1"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="follow_redirects" name="follow_redirects"
+                                   class="form-checkbox h-5 w-5 text-primary rounded">
+                            <span class="ml-2 text-gray-700">跟随重定向</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="validate" name="validate"
+                                   class="form-checkbox h-5 w-5 text-primary rounded">
+                            <span class="ml-2 text-gray-700">验证URL状态</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="api_detection" name="api_detection" checked
+                                   class="form-checkbox h-5 w-5 text-primary rounded">
+                            <span class="ml-2 text-gray-700">API端点检测</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="auth_detection" name="auth_detection"
+                                   class="form-checkbox h-5 w-5 text-primary rounded">
+                            <span class="ml-2 text-gray-700">鉴权状态检测</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="idor_detection" name="idor_detection"
+                                   class="form-checkbox h-5 w-5 text-primary rounded">
+                            <span class="ml-2 text-gray-700">IDOR越权测试</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="jwt_detection" name="jwt_detection"
+                                   class="form-checkbox h-5 w-5 text-primary rounded">
+                            <span class="ml-2 text-gray-700">JWT鉴权绕过检测</span>
+                        </label>
+                    </div>
+                </div>
+                <div id="auth_token_container" class="mt-2 hidden">
+                    <label for="auth_token" class="block text-gray-700 font-medium mb-1">认证Token</label>
+                    <input type="text" id="auth_token" name="auth_token" placeholder="Bearer token" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                </div>
+                
+                <button type="submit" id="scanButton" class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-all flex items-center justify-center">
+                    <i class="fa fa-play mr-2"></i>开始扫描
+                </button>
+            </form>
+        </div>
+
+        <!-- 加载状态 -->
+        <div id="loading" class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 mb-8 hidden">
+            <div class="flex items-center justify-center">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                <div class="ml-4 text-gray-700">正在扫描，请稍候...</div>
+            </div>
+        </div>
+
+        <!-- 结果显示 -->
+        <div id="results" class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 mb-8 hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-gray-800">
+                    <i class="fa fa-results text-primary mr-2"></i>扫描结果
+                </h2>
+                <div class="flex space-x-3">
+                    <button id="generateReportBtn" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-5 rounded-lg transition-all flex items-center justify-center w-32">
+                        <i class="fa fa-file-text mr-2"></i>生成报告
+                    </button>
+                    <button id="deepAnalysisBtn" class="bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-5 rounded-lg transition-all flex items-center justify-center w-32">
+                        <i class="fa fa-search-plus mr-2"></i>深度分析
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 标签页 -->
+            <div class="border-b border-gray-200 mb-4">
+                <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="resultTabs" role="tablist">
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-primary rounded-t-lg active" id="output-tab" data-tab="output" type="button" role="tab" aria-controls="output" aria-selected="true">
+                            <i class="fa fa-terminal mr-1"></i>输出
+                        </button>
+                    </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="urls-tab" data-tab="urls" type="button" role="tab" aria-controls="urls" aria-selected="false">
+                            <i class="fa fa-link mr-1"></i>URLs
+                        </button>
+                    </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="secrets-tab" data-tab="secrets" type="button" role="tab" aria-controls="secrets" aria-selected="false">
+                            <i class="fa fa-key mr-1"></i>敏感信息
+                        </button>
+                    </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="js-tab" data-tab="js" type="button" role="tab" aria-controls="js" aria-selected="false">
+                            <i class="fa fa-code mr-1"></i>JS文件
+                        </button>
+                    </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="api-tab" data-tab="api" type="button" role="tab" aria-controls="api" aria-selected="false">
+                            <i class="fa fa-sitemap mr-1"></i>API端点
+                        </button>
+                    </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="auth-tab" data-tab="auth" type="button" role="tab" aria-controls="auth" aria-selected="false">
+                            <i class="fa fa-lock mr-1"></i>鉴权检测
+                        </button>
+                    </li>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="idor-tab" data-tab="idor" type="button" role="tab" aria-controls="idor" aria-selected="false">
+                            <i class="fa fa-exchange mr-1"></i>IDOR检测
+                        </button>
+                    </li>
+                    <li role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="jwt-tab" data-tab="jwt" type="button" role="tab" aria-controls="jwt" aria-selected="false">
+                            <i class="fa fa-shield mr-1"></i>JWT检测
+                        </button>
+                    </li>
+                    <li role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 rounded-t-lg" id="reports-tab" data-tab="reports" type="button" role="tab" aria-controls="reports" aria-selected="false">
+                            <i class="fa fa-file-text mr-1"></i>报告管理
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 标签内容 -->
+            <div class="tab-content">
+                <!-- 输出内容 -->
+                <div class="tab-pane active" id="output">
+                    <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96">
+                        <pre id="outputContent" class="text-sm text-gray-800 whitespace-pre-wrap"></pre>
+                    </div>
+                </div>
+                
+                <!-- URLs内容 -->
+                <div class="tab-pane hidden" id="urls">
+                    <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96">
+                        <ul id="urlsContent" class="space-y-2"></ul>
+                    </div>
+                </div>
+                
+                <!-- 敏感信息内容 -->
+                <div class="tab-pane hidden" id="secrets">
+                    <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96">
+                        <ul id="secretsContent" class="space-y-4"></ul>
+                    </div>
+                </div>
+                
+                <!-- JS文件内容 -->
+                <div class="tab-pane hidden" id="js">
+                    <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96">
+                        <ul id="jsContent" class="space-y-2"></ul>
+                    </div>
+                </div>
+                
+                <!-- API端点内容 -->
+                <div class="tab-pane hidden" id="api">
+                    <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96">
+                        <ul id="apiContent" class="space-y-4"></ul>
+                    </div>
+                </div>
+                
+                <!-- 鉴权检测内容 -->
+                <div class="tab-pane hidden" id="auth">
+                    <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96">
+                        <ul id="authContent" class="space-y-4"></ul>
+                    </div>
+                </div>
+                
+                <!-- IDOR检测内容 -->
+                <div class="tab-pane hidden" id="idor">
+                    <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96">
+                        <ul id="idorContent" class="space-y-4"></ul>
+                    </div>
+                </div>
+                
+                <!-- JWT检测内容 -->
+                <div class="tab-pane hidden" id="jwt">
+                    <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-96">
+                        <ul id="jwtContent" class="space-y-4"></ul>
+                    </div>
+                </div>
+                
+                <!-- 报告管理内容 -->
+                <div class="tab-pane hidden" id="reports">
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-800">报告列表</h3>
+                            <button id="refreshReportsBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-3 rounded-lg transition-all flex items-center text-sm">
+                                <i class="fa fa-refresh mr-1"></i>刷新
+                            </button>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg overflow-auto max-h-64">
+                            <ul id="reportsList" class="space-y-2"></ul>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2">报告内容</h3>
+                            <div id="reportContent" class="border border-gray-200 rounded-lg p-4 min-h-[200px] bg-white overflow-auto">
+                                <p class="text-gray-500">请选择一个报告查看内容</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 鉴权状态检测复选框事件处理
+        document.getElementById('auth_detection').addEventListener('change', function() {
+            const authTokenContainer = document.getElementById('auth_token_container');
+            if (this.checked) {
+                authTokenContainer.classList.remove('hidden');
+            } else {
+                authTokenContainer.classList.add('hidden');
+            }
+        });
+        
+        // 表单提交处理
+        document.getElementById('scanForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const formData = {
+                url: document.getElementById('url').value,
+                max_depth: parseInt(document.getElementById('max_depth').value),
+                max_page: parseInt(document.getElementById('max_page').value),
+                follow_redirects: document.getElementById('follow_redirects').checked,
+                validate: document.getElementById('validate').checked,
+                api_detection: document.getElementById('api_detection').checked,
+                auth_detection: document.getElementById('auth_detection').checked,
+                idor_detection: document.getElementById('idor_detection').checked,
+                jwt_detection: document.getElementById('jwt_detection').checked,
+                auth_token: document.getElementById('auth_token').value,
+                detail: true
+            };
+            
+            // 显示加载状态
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            
+            try {
+                // 发送扫描请求
+                const response = await fetch('/api/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.error) {
+                    alert('扫描失败: ' + result.error);
+                    return;
+                }
+                
+                // 保存结果ID
+                setCurrentResultId(result.result_id);
+                
+                // 获取扫描结果
+                const resultResponse = await fetch(`/api/result/${result.result_id}`);
+                const scanResult = await resultResponse.json();
+                
+                // 显示结果
+                displayResults(scanResult);
+            } catch (error) {
+                alert('请求失败: ' + error.message);
+            } finally {
+                // 隐藏加载状态
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('results').classList.remove('hidden');
+            }
+        });
+        
+        // 显示扫描结果
+        function displayResults(result) {
+            // 显示输出内容
+            const outputContent = document.getElementById('outputContent');
+            outputContent.textContent = result.output.join('\n');
+            
+            // 显示URLs
+            const urlsContent = document.getElementById('urlsContent');
+            urlsContent.innerHTML = '';
+            for (const [url, data] of Object.entries(result.urls)) {
+                const li = document.createElement('li');
+                li.className = 'p-2 border-b border-gray-200';
+                li.innerHTML = `
+                    <div class="font-medium text-blue-600">${url}</div>
+                    <div class="text-sm text-gray-600">状态: ${data.status || 'Unknown'}</div>
+                    <div class="text-sm text-gray-600">内容长度: ${data.content_length || 'N/A'}</div>
+                    <div class="text-sm text-gray-600">标题: ${data.title || 'N/A'}</div>
+                `;
+                urlsContent.appendChild(li);
+            }
+            
+            // 显示敏感信息
+            const secretsContent = document.getElementById('secretsContent');
+            secretsContent.innerHTML = '';
+            for (const [url, secrets] of Object.entries(result.secrets)) {
+                const li = document.createElement('li');
+                li.className = 'p-3 border border-red-200 bg-red-50 rounded-lg';
+                let secretsHtml = `<div class="font-medium text-red-600 mb-2">${url}</div>`;
+                secrets.forEach(secret => {
+                    secretsHtml += `<div class="text-sm mb-1"><span class="font-medium">${secret.type}:</span> ${secret.value}</div>`;
+                });
+                li.innerHTML = secretsHtml;
+                secretsContent.appendChild(li);
+            }
+            
+            // 显示JS文件
+            const jsContent = document.getElementById('jsContent');
+            jsContent.innerHTML = '';
+            for (const [url, data] of Object.entries(result.js)) {
+                const li = document.createElement('li');
+                li.className = 'p-2 border-b border-gray-200';
+                li.innerHTML = `
+                    <div class="font-medium text-green-600">${url}</div>
+                    <div class="text-sm text-gray-600">状态: ${data.status || 'Unknown'}</div>
+                `;
+                jsContent.appendChild(li);
+            }
+            
+            // 显示API端点
+            const apiContent = document.getElementById('apiContent');
+            apiContent.innerHTML = '';
+            if (result.api_endpoints && result.api_endpoints.length > 0) {
+                result.api_endpoints.forEach(endpoint => {
+                    const li = document.createElement('li');
+                    li.className = 'p-3 border border-blue-200 bg-blue-50 rounded-lg';
+                    let endpointHtml = `
+                        <div class="font-medium text-blue-600 mb-2">${endpoint.url}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">方法:</span> ${endpoint.method}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">来源:</span> ${endpoint.source}</div>
+                    `;
+                    if (endpoint.params && endpoint.params.length > 0) {
+                        endpointHtml += `<div class="text-sm mb-1"><span class="font-medium">参数:</span> ${JSON.stringify(endpoint.params)}</div>`;
+                    }
+                    if (endpoint.path_params && endpoint.path_params.length > 0) {
+                        endpointHtml += `<div class="text-sm mb-1"><span class="font-medium">路径参数:</span> ${endpoint.path_params.join(', ')}</div>`;
+                    }
+                    if (endpoint.query_params && endpoint.query_params.length > 0) {
+                        endpointHtml += `<div class="text-sm mb-1"><span class="font-medium">查询参数:</span> ${JSON.stringify(endpoint.query_params)}</div>`;
+                    }
+                    if (endpoint.description) {
+                        endpointHtml += `<div class="text-sm mb-1"><span class="font-medium">描述:</span> ${endpoint.description}</div>`;
+                    }
+                    if (endpoint.tags && endpoint.tags.length > 0) {
+                        endpointHtml += `<div class="text-sm"><span class="font-medium">标签:</span> ${endpoint.tags.join(', ')}</div>`;
+                    }
+                    li.innerHTML = endpointHtml;
+                    apiContent.appendChild(li);
+                });
+            } else {
+                apiContent.innerHTML = '<div class="text-gray-500">未发现API端点</div>';
+            }
+            
+            // 显示鉴权检测结果
+            const authContent = document.getElementById('authContent');
+            authContent.innerHTML = '';
+            if (result.auth_results && result.auth_results.length > 0) {
+                result.auth_results.forEach(authResult => {
+                    const li = document.createElement('li');
+                    li.className = 'p-3 border border-purple-200 bg-purple-50 rounded-lg';
+                    let authHtml = `
+                        <div class="font-medium text-purple-600 mb-2">${authResult.url}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">方法:</span> ${authResult.method}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">需要鉴权:</span> ${authResult.requires_auth ? '是' : '否'}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">鉴权类型:</span> ${authResult.auth_type || '未知'}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">可能绕过鉴权:</span> ${authResult.auth_bypass_possible ? '是' : '否'}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">置信度:</span> ${(authResult.confidence * 100).toFixed(2)}%</div>
+                    `;
+                    if (authResult.details) {
+                        authHtml += `<div class="text-sm"><span class="font-medium">详情:</span> ${JSON.stringify(authResult.details)}</div>`;
+                    }
+                    li.innerHTML = authHtml;
+                    authContent.appendChild(li);
+                });
+            } else {
+                authContent.innerHTML = '<div class="text-gray-500">未进行鉴权状态检测</div>';
+            }
+            
+            // 显示IDOR检测结果
+            const idorContent = document.getElementById('idorContent');
+            idorContent.innerHTML = '';
+            if (result.idor_results && result.idor_results.length > 0) {
+                result.idor_results.forEach(idorResult => {
+                    const li = document.createElement('li');
+                    li.className = 'p-3 border border-red-200 bg-red-50 rounded-lg';
+                    let idorHtml = `
+                        <div class="font-medium text-red-600 mb-2">${idorResult.original_url}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">测试URL:</span> ${idorResult.test_url}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">原始ID:</span> ${JSON.stringify(idorResult.original_id)}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">测试ID:</span> ${idorResult.test_id}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">存在漏洞:</span> ${idorResult.vulnerable ? '是' : '否'}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">状态码:</span> ${idorResult.status_code}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">置信度:</span> ${(idorResult.confidence * 100).toFixed(2)}%</div>
+                    `;
+                    if (idorResult.details) {
+                        idorHtml += `<div class="text-sm"><span class="font-medium">详情:</span> ${JSON.stringify(idorResult.details)}</div>`;
+                    }
+                    li.innerHTML = idorHtml;
+                    idorContent.appendChild(li);
+                });
+            } else if (result.idor_results !== undefined) {
+                idorContent.innerHTML = '<div class="text-gray-500">未检测到IDOR漏洞</div>';
+            } else {
+                idorContent.innerHTML = '<div class="text-gray-500">未进行IDOR越权测试</div>';
+            }
+            
+            // 显示JWT检测结果
+            const jwtContent = document.getElementById('jwtContent');
+            jwtContent.innerHTML = '';
+            if (result.jwt_results && result.jwt_results.length > 0) {
+                result.jwt_results.forEach(jwtResult => {
+                    const li = document.createElement('li');
+                    li.className = 'p-3 border border-yellow-200 bg-yellow-50 rounded-lg';
+                    let jwtHtml = `
+                        <div class="font-medium text-yellow-600 mb-2">${jwtResult.endpoint}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">漏洞类型:</span> ${jwtResult.vulnerability}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">描述:</span> ${jwtResult.description}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">严重程度:</span> ${jwtResult.severity}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">状态码:</span> ${jwtResult.status_code}</div>
+                        <div class="text-sm mb-1"><span class="font-medium">置信度:</span> ${(jwtResult.confidence * 100).toFixed(2)}%</div>
+                    `;
+                    if (jwtResult.alg_used) {
+                        jwtHtml += `<div class="text-sm mb-1"><span class="font-medium">使用的算法:</span> ${jwtResult.alg_used}</div>`;
+                    }
+                    if (jwtResult.original_alg) {
+                        jwtHtml += `<div class="text-sm mb-1"><span class="font-medium">原始算法:</span> ${jwtResult.original_alg}</div>`;
+                    }
+                    if (jwtResult.tested_alg) {
+                        jwtHtml += `<div class="text-sm"><span class="font-medium">测试的算法:</span> ${jwtResult.tested_alg}</div>`;
+                    }
+                    li.innerHTML = jwtHtml;
+                    jwtContent.appendChild(li);
+                });
+            } else if (result.jwt_results !== undefined) {
+                jwtContent.innerHTML = '<div class="text-gray-500">未检测到JWT漏洞</div>';
+            } else {
+                jwtContent.innerHTML = '<div class="text-gray-500">未进行JWT鉴权绕过检测</div>';
+            }
+        }
+        
+        // 标签页切换
+        document.getElementById('resultTabs').addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON') {
+                // 移除所有活动状态
+                document.querySelectorAll('#resultTabs button').forEach(btn => {
+                    btn.classList.remove('border-primary');
+                    btn.classList.add('border-transparent');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+                
+                // 添加活动状态
+                e.target.classList.remove('border-transparent');
+                e.target.classList.add('border-primary');
+                e.target.setAttribute('aria-selected', 'true');
+                
+                // 隐藏所有标签内容
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.add('hidden');
+                    pane.classList.remove('active');
+                });
+                
+                // 显示选中的标签内容
+                const tabId = e.target.getAttribute('data-tab');
+                document.getElementById(tabId).classList.remove('hidden');
+                document.getElementById(tabId).classList.add('active');
+            }
+        });
+        
+        // 全局变量存储当前结果ID
+        let currentResultId = null;
+        
+        // 保存结果ID
+        function setCurrentResultId(resultId) {
+            currentResultId = resultId;
+        }
+        
+        // 生成报告按钮点击事件
+        document.getElementById('generateReportBtn').addEventListener('click', async function() {
+            if (!currentResultId) {
+                alert('请先执行扫描获取结果');
+                return;
+            }
+            
+            // 显示加载状态
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i>生成中...';
+            this.disabled = true;
+            
+            try {
+                // 发送报告生成请求
+                const response = await fetch('/api/generate-report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ result_id: currentResultId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.error) {
+                    alert('报告生成失败: ' + result.error);
+                } else {
+                    alert('报告生成成功！报告已保存到reports目录');
+                }
+            } catch (error) {
+                alert('请求失败: ' + error.message);
+            } finally {
+                // 恢复按钮状态
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }
+        });
+        
+        // 深度分析按钮点击事件
+        document.getElementById('deepAnalysisBtn').addEventListener('click', async function() {
+            if (!currentResultId) {
+                alert('请先执行扫描获取结果');
+                return;
+            }
+            
+            // 显示加载状态
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i>分析中...';
+            this.disabled = true;
+            
+            try {
+                // 发送深度分析请求
+                const response = await fetch('/api/deep-analysis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ result_id: currentResultId })
+                });
+                
+                const result = await response.json();
+                
+                if (result.error) {
+                    alert('深度分析失败: ' + result.error);
+                } else {
+                    alert('深度分析完成！详细报告已保存到reports目录');
+                    // 刷新报告列表
+                    loadReportsList();
+                }
+            } catch (error) {
+                alert('请求失败: ' + error.message);
+            } finally {
+                // 恢复按钮状态
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }
+        });
+        
+        // 刷新报告列表按钮点击事件
+        document.getElementById('refreshReportsBtn').addEventListener('click', function() {
+            loadReportsList();
+        });
+        
+        // 加载报告列表
+        async function loadReportsList() {
+            try {
+                const response = await fetch('/api/reports');
+                const result = await response.json();
+                
+                if (result.error) {
+                    alert('获取报告列表失败: ' + result.error);
+                    return;
+                }
+                
+                const reportsList = document.getElementById('reportsList');
+                reportsList.innerHTML = '';
+                
+                if (result.reports.length === 0) {
+                    reportsList.innerHTML = '<div class="text-gray-500">暂无报告</div>';
+                    return;
+                }
+                
+                result.reports.forEach(report => {
+                    const li = document.createElement('li');
+                    li.className = 'p-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 rounded';
+                    li.innerHTML = `
+                        <div class="font-medium">${report.name}</div>
+                        <div class="text-sm text-gray-600">
+                            ${formatDate(report.mtime)} | ${formatSize(report.size)}
+                        </div>
+                    `;
+                    li.addEventListener('click', () => loadReportContent(report.path));
+                    reportsList.appendChild(li);
+                });
+            } catch (error) {
+                alert('请求失败: ' + error.message);
+            }
+        }
+        
+        // 加载报告内容
+        async function loadReportContent(reportPath) {
+            try {
+                const response = await fetch(`/api/report/${encodeURIComponent(reportPath)}`);
+                const result = await response.json();
+                
+                if (result.error) {
+                    alert('获取报告内容失败: ' + result.error);
+                    return;
+                }
+                
+                const reportContent = document.getElementById('reportContent');
+                
+                // 根据文件类型显示不同内容
+                if (reportPath.endsWith('.html')) {
+                    // 显示HTML内容
+                    reportContent.innerHTML = result.content;
+                } else if (reportPath.endsWith('.md')) {
+                    // 显示Markdown内容
+                    reportContent.innerHTML = `<pre class="whitespace-pre-wrap">${result.content}</pre>`;
+                } else if (reportPath.endsWith('.json')) {
+                    // 格式化显示JSON内容
+                    try {
+                        const jsonObj = JSON.parse(result.content);
+                        reportContent.innerHTML = `<pre class="whitespace-pre-wrap">${JSON.stringify(jsonObj, null, 2)}</pre>`;
+                    } catch {
+                        reportContent.innerHTML = `<pre class="whitespace-pre-wrap">${result.content}</pre>`;
+                    }
+                } else {
+                    // 显示纯文本内容
+                    reportContent.innerHTML = `<pre class="whitespace-pre-wrap">${result.content}</pre>`;
+                }
+            } catch (error) {
+                alert('请求失败: ' + error.message);
+            }
+        }
+        
+        // 格式化日期
+        function formatDate(timestamp) {
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleString('zh-CN');
+        }
+        
+        // 格式化文件大小
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / 1048576).toFixed(2) + ' MB';
+        }
+        
+        // 当切换到报告标签页时加载报告列表
+        document.getElementById('resultTabs').addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON' && e.target.getAttribute('data-tab') === 'reports') {
+                loadReportsList();
+            }
+        });
+    </script>
+</body>
+</html>

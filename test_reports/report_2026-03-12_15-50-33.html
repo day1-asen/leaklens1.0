@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeakLens 扫描报告</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">LeakLens 扫描报告</h1>
+            <p class="text-gray-600 mt-2">扫描时间: 2026-03-12_15-50-33</p>
+            <p class="text-gray-600">目标: http://localhost:5000</p>
+        </header>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">扫描摘要</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-medium text-gray-700">总URL数</h3>
+                    <p class="text-2xl font-bold text-blue-600">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-medium text-gray-700">总敏感信息数</h3>
+                    <p class="text-2xl font-bold text-red-600">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-medium text-gray-700">总API端点数</h3>
+                    <p class="text-2xl font-bold text-green-600">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-medium text-gray-700">总认证检测结果</h3>
+                    <p class="text-2xl font-bold text-purple-600">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-medium text-gray-700">总IDOR漏洞检测结果</h3>
+                    <p class="text-2xl font-bold text-orange-600">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="text-lg font-medium text-gray-700">总JWT认证绕过检测结果</h3>
+                    <p class="text-2xl font-bold text-teal-600">0</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">风险分布</h2>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <canvas id="riskBarChart"></canvas>
+                    </div>
+                    <div>
+                        <canvas id="riskPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">敏感信息</h2>
+            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+                <p class='text-gray-600'>未发现敏感信息</p>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">API端点</h2>
+            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+                <p class='text-gray-600'>未发现API端点</p>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">认证状态检测</h2>
+            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+                <p class='text-gray-600'>未进行认证状态检测</p>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">IDOR漏洞检测</h2>
+            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+                <p class='text-gray-600'>未检测到IDOR漏洞</p>
+            </div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">JWT认证绕过检测</h2>
+            <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+                <p class='text-gray-600'>未检测到JWT认证绕过漏洞</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // 风险分布数据
+        const riskData = {
+            labels: ['危急', '高危', '中危', '低危', '信息'],
+            datasets: [{
+                label: '风险分布',
+                data: [0, 0, 0, 0, 0],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(255, 205, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(54, 162, 235, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 205, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // 柱状图
+        const barCtx = document.getElementById('riskBarChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: riskData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+
+        // 饼图
+        const pieCtx = document.getElementById('riskPieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: riskData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+        
