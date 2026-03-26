@@ -17,7 +17,8 @@ class DualStagePipeline:
         执行完整流水线
         """
         print("阶段一：快速整理分级...")
-        stage1_result = self.grader.process(raw_findings)
+        target_url = context.get('url', '未知URL') if context else '未知URL'
+        stage1_result = self.grader.process(raw_findings, target_url)
         
         # 生成简易报告
         simple_report = self.reporter.generate_simple_report(stage1_result)

@@ -114,7 +114,12 @@ class ReportGenerator:
                     semantic = ai.get('ai_semantic', {})
                     real_type = semantic.get('type', '未知')
                     confidence = semantic.get('confidence', '未知')
-                    html.append(f'<p>真实类型：{real_type} | 置信度：{confidence}</p>')
+                    sensitivity = semantic.get('sensitivity', '未知')
+                    details = semantic.get('details', '暂无详细分析')
+                    reason = semantic.get('reason', '暂无分析原因')
+                    html.append(f'<p>真实类型：{real_type} | 置信度：{confidence} | 敏感度：{sensitivity}</p>')
+                    html.append(f'<p>分析原因：{reason}</p>')
+                    html.append(f'<p>详细分析：{details}</p>')
                     
                     html.append('<h4>风险链</h4>')
                     risk_chain = ai.get('ai_risk_chain', [])
@@ -123,7 +128,10 @@ class ReportGenerator:
                             step_num = step.get('step', '未知')
                             action = step.get('action', '未知')
                             likelihood = step.get('likelihood', '未知')
-                            html.append(f'<p>步骤{step_num}：{action}（可能性：{likelihood}）</p>')
+                            difficulty = step.get('difficulty', '未知')
+                            impact = step.get('impact', '未知')
+                            html.append(f'<p>步骤{step_num}：{action}（可能性：{likelihood}，难度：{difficulty}）</p>')
+                            html.append(f'<p style="margin-left: 20px;">潜在影响：{impact}</p>')
                     else:
                         html.append('<p>暂无风险链分析</p>')
                     

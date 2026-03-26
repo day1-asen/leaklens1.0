@@ -181,20 +181,21 @@ def generate_report():
         for url_node, secret_set in result.get('secrets', {}).items():
             for secret in secret_set:
                 # 处理secret可能是对象的情况
-                if hasattr(secret, '__dict__'):
+                if hasattr(secret, 'type') and hasattr(secret, 'data'):
+                    # 处理Secret对象
                     secret_dict = {
                         'type': getattr(secret, 'type', 'unknown'),
-                        'category': getattr(secret, 'category', 'unknown'),
-                        'matched_text': getattr(secret, 'value', ''),
+                        'category': 'unknown',
+                        'matched_text': getattr(secret, 'data', ''),
                         'location': url_node,
-                        'confidence': getattr(secret, 'confidence', 0.5),
-                        'entropy': getattr(secret, 'entropy', 0)
+                        'confidence': 0.5,
+                        'entropy': 0
                     }
                 elif isinstance(secret, dict):
                     secret_dict = {
                         'type': secret.get('type', 'unknown'),
                         'category': secret.get('category', 'unknown'),
-                        'matched_text': secret.get('value', secret.get('matched_text', '')),
+                        'matched_text': secret.get('data', secret.get('value', secret.get('matched_text', ''))),
                         'location': url_node,
                         'confidence': secret.get('confidence', 0.5),
                         'entropy': secret.get('entropy', 0)
@@ -202,6 +203,10 @@ def generate_report():
                 else:
                     continue
                 secrets.append(secret_dict)
+        
+        # 检查是否有敏感信息发现
+        if not secrets:
+            return jsonify({'message': '未发现敏感信息，无需生成报告', 'report_result': None})
         
         # 生成报告
         pipeline = DualStagePipeline(use_deep_analysis=False)
@@ -233,20 +238,21 @@ def deep_analysis():
         for url_node, secret_set in result.get('secrets', {}).items():
             for secret in secret_set:
                 # 处理secret可能是对象的情况
-                if hasattr(secret, '__dict__'):
+                if hasattr(secret, 'type') and hasattr(secret, 'data'):
+                    # 处理Secret对象
                     secret_dict = {
                         'type': getattr(secret, 'type', 'unknown'),
-                        'category': getattr(secret, 'category', 'unknown'),
-                        'matched_text': getattr(secret, 'value', ''),
+                        'category': 'unknown',
+                        'matched_text': getattr(secret, 'data', ''),
                         'location': url_node,
-                        'confidence': getattr(secret, 'confidence', 0.5),
-                        'entropy': getattr(secret, 'entropy', 0)
+                        'confidence': 0.5,
+                        'entropy': 0
                     }
                 elif isinstance(secret, dict):
                     secret_dict = {
                         'type': secret.get('type', 'unknown'),
                         'category': secret.get('category', 'unknown'),
-                        'matched_text': secret.get('value', secret.get('matched_text', '')),
+                        'matched_text': secret.get('data', secret.get('value', secret.get('matched_text', ''))),
                         'location': url_node,
                         'confidence': secret.get('confidence', 0.5),
                         'entropy': secret.get('entropy', 0)
@@ -254,6 +260,10 @@ def deep_analysis():
                 else:
                     continue
                 secrets.append(secret_dict)
+        
+        # 检查是否有敏感信息发现
+        if not secrets:
+            return jsonify({'message': '未发现敏感信息，无需进行深度分析', 'analysis_result': None})
         
         # 执行深度分析
         pipeline = DualStagePipeline(use_deep_analysis=True)

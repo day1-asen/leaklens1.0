@@ -589,7 +589,15 @@
                 const result = await response.json();
                 
                 if (result.error) {
-                    alert('报告生成失败: ' + result.error);
+                    if (result.error.includes('Invalid result ID')) {
+                        alert('扫描结果已过期，请重新执行扫描');
+                        // 重置currentResultId
+                        currentResultId = null;
+                    } else {
+                        alert('报告生成失败: ' + result.error);
+                    }
+                } else if (result.report_result === null) {
+                    alert(result.message || '未发现敏感信息，无需生成报告');
                 } else {
                     alert('报告生成成功！报告已保存到reports目录');
                 }
@@ -627,7 +635,15 @@
                 const result = await response.json();
                 
                 if (result.error) {
-                    alert('深度分析失败: ' + result.error);
+                    if (result.error.includes('Invalid result ID')) {
+                        alert('扫描结果已过期，请重新执行扫描');
+                        // 重置currentResultId
+                        currentResultId = null;
+                    } else {
+                        alert('深度分析失败: ' + result.error);
+                    }
+                } else if (result.analysis_result === null) {
+                    alert(result.message || '未发现敏感信息，无需进行深度分析');
                 } else {
                     alert('深度分析完成！详细报告已保存到reports目录');
                     // 刷新报告列表

@@ -11,6 +11,76 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 from leaklens.entity import Secret
 from leaklens.exception import HandlerException
 
+# 测试数据黑名单
+TEST_DATA_BLACKLIST = {
+    # 邮箱
+    'email': [
+        'test@example.com', 'user@example.com', 'admin@example.com', 
+        'test@test.com', 'user@test.com', 'admin@test.com',
+        'example@example.com', 'demo@example.com', 'sample@example.com',
+        'mail@mail.ru'
+    ],
+    # 邮箱后缀
+    'email_suffix': [
+        '@example.com', '@mail.ru'
+    ],
+    # 电话
+    'phone': [
+        '1234567890', '0123456789', '1111111111',
+        '2222222222', '3333333333', '4444444444',
+        '5555555555', '6666666666', '7777777777',
+        '8888888888', '9999999999'
+    ],
+    # 身份证号
+    'idcard': [
+        '110101199001011234', '110101199001011235',
+        '110101199001011236', '110101199001011237',
+        '110101199001011238', '110101199001011239'
+    ],
+    # IP地址
+    'ip': [
+        '127.0.0.1', '0.0.0.0', '192.168.1.1',
+        '192.168.0.1', '10.0.0.1', '172.16.0.1'
+    ]
+}
+
+# 检查是否为测试数据
+def is_test_data(secret_type: str, secret_data: str) -> bool:
+    """检查敏感信息是否为测试数据"""
+    # 转换为小写进行比较
+    secret_data_lower = secret_data.lower()
+    
+    # 检查邮箱
+    if 'email' in secret_type.lower():
+        # 检查完整邮箱
+        for test_email in TEST_DATA_BLACKLIST['email']:
+            if test_email.lower() in secret_data_lower:
+                return True
+        # 检查邮箱后缀
+        for suffix in TEST_DATA_BLACKLIST['email_suffix']:
+            if suffix.lower() in secret_data_lower:
+                return True
+    
+    # 检查电话
+    if 'phone' in secret_type.lower():
+        for test_phone in TEST_DATA_BLACKLIST['phone']:
+            if test_phone in secret_data:
+                return True
+    
+    # 检查身份证号
+    if 'id' in secret_type.lower() or 'card' in secret_type.lower():
+        for test_id in TEST_DATA_BLACKLIST['idcard']:
+            if test_id in secret_data:
+                return True
+    
+    # 检查IP地址
+    if 'ip' in secret_type.lower():
+        for test_ip in TEST_DATA_BLACKLIST['ip']:
+            if test_ip in secret_data:
+                return True
+    
+    return False
+
 # T = typing.TypeVar("T")
 # IterableAsyncOrSync: typing.TypeAlias = typing.Iterable[T] | typing.AsyncIterable[T]
 BSResult = Union[Tag, NavigableString, None]
@@ -48,15 +118,19 @@ class ReRegexHandler(Handler):
                     if match is not None:
                         secret_data = match if type(match) is not tuple else match[0]
                         secret_type = self.types[index]
-                        secret = Secret(type=secret_type, data=secret_data)
-                        result_list.append(secret)
+                        # 检查是否为测试数据
+                        if not is_test_data(secret_type, secret_data):
+                            secret = Secret(type=secret_type, data=secret_data)
+                            result_list.append(secret)
             else:
                 match = regex.search(text)
                 if match is not None:
                     secret_data = match.group(0)
                     secret_type = self.types[index]
-                    secret = Secret(type=secret_type, data=secret_data)
-                    result_list.append(secret)
+                    # 检查是否为测试数据
+                    if not is_test_data(secret_type, secret_data):
+                        secret = Secret(type=secret_type, data=secret_data)
+                        result_list.append(secret)
 
         return result_list
 
@@ -130,7 +204,9 @@ if not sys.platform.startswith("win"):
             ) -> typing.Optional[bool]:
                 match = text[froms:to]
                 type = self.types.get(id)
-                results.append(Secret(type, data=match))
+                # 检查是否为测试数据
+                if not is_test_data(type, match):
+                    results.append(Secret(type, data=match))
                 return None
 
             self._db.scan(

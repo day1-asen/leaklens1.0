@@ -34,7 +34,7 @@ class QuickGrader:
             'default': {'base': 'MEDIUM', 'entropy_threshold': 3.0}
         }
     
-    def process(self, raw_findings: List[Dict]) -> Dict:
+    def process(self, raw_findings: List[Dict], target_url: str = '未知URL') -> Dict:
         """
         快速处理原始检测数据
         输出：标准化数据 + 简易报告
@@ -53,7 +53,7 @@ class QuickGrader:
         stats = self._generate_stats(normalized)
         
         # 4. 生成简易报告（JSON/Markdown）
-        report = self._generate_simple_report(normalized, stats)
+        report = self._generate_simple_report(normalized, stats, target_url)
         
         return {
             'findings': [asdict(f) for f in normalized],
@@ -111,7 +111,7 @@ class QuickGrader:
         stats['avg_confidence'] = total_conf / len(findings) if findings else 0
         return stats
     
-    def _generate_simple_report(self, findings: List[SimpleFinding], stats: Dict) -> Dict:
+    def _generate_simple_report(self, findings: List[SimpleFinding], stats: Dict, target_url: str = '未知URL') -> Dict:
         """生成简易报告（JSON/Markdown两版）"""
         
         # JSON版本（供CI/CD消费）
@@ -119,22 +119,54 @@ class QuickGrader:
             'summary': stats,
             'findings': [asdict(f) for f in findings],
             'generated_at': datetime.now().isoformat(),
-            'version': '1.0-simple'
+            'version': '1.0-simple',
+            'target_url': target_url,
+            'risk_assessment': self._generate_risk_assessment(findings, stats),
+            'recommendations': self._generate_recommendations(findings)
         }
         
         # Markdown版本（供快速阅读）
         md_lines = []
         md_lines.append("# 敏感信息检测简易报告\n")
         md_lines.append(f"**生成时间**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        md_lines.append(f"**检测URL**：{target_url}\n")
         md_lines.append(f"**总发现数**：{stats['total']}\n")
-        md_lines.append("## 风险统计\n")
+        md_lines.append(f"**高风险发现数**：{stats.get('high_risk_count', 0)}\n")
+        md_lines.append(f"**平均置信度**：{stats.get('avg_confidence', 0):.2f}\n")
+        
+        # 风险统计
+        md_lines.append("\n## 风险统计\n")
         for sev, count in stats['by_severity'].items():
             md_lines.append(f"- {sev}: {count}")
-        md_lines.append("\n## 发现列表\n")
-        for f in findings[:10]:  # 只展示前10条
+        
+        # 类型统计
+        md_lines.append("\n## 类型统计\n")
+        for typ, count in stats['by_type'].items():
+            md_lines.append(f"- {typ}: {count}")
+        
+        # 发现详情
+        md_lines.append("\n## 发现详情\n")
+        for f in findings:
             # 确保显示具体的IP地址或其他敏感信息
             matched_text = f.matched_text if f.matched_text else '未知'
-            md_lines.append(f"- [{f.severity}] {f.type}: {matched_text}")
+            md_lines.append(f"### [{f.severity}] {f.type}")
+            md_lines.append(f"- 发现内容：{matched_text}")
+            md_lines.append(f"- 发现位置：{f.location}")
+            md_lines.append(f"- 置信度：{f.confidence:.2f}")
+            md_lines.append(f"- 熵值：{f.entropy:.2f}")
+            md_lines.append("")
+        
+        # 风险评估
+        md_lines.append("\n## 风险评估\n")
+        risk_assessment = self._generate_risk_assessment(findings, stats)
+        for key, value in risk_assessment.items():
+            md_lines.append(f"- {key}：{value}")
+        
+        # 修复建议
+        md_lines.append("\n## 修复建议\n")
+        recommendations = self._generate_recommendations(findings)
+        for rec in recommendations:
+            md_lines.append(f"- {rec}")
         
         markdown_report = '\n'.join(md_lines)
         
@@ -142,6 +174,47 @@ class QuickGrader:
             'json': json_report,
             'markdown': markdown_report
         }
+    
+    def _generate_risk_assessment(self, findings: List[SimpleFinding], stats: Dict) -> Dict:
+        """生成风险评估"""
+        high_risk_count = stats.get('high_risk_count', 0)
+        total_findings = stats.get('total', 0)
+        
+        if high_risk_count == 0:
+            overall_risk = "低"
+        elif high_risk_count / total_findings > 0.5:
+            overall_risk = "高"
+        else:
+            overall_risk = "中"
+        
+        return {
+            '整体风险等级': overall_risk,
+            '高风险发现比例': f"{high_risk_count/total_findings*100:.1f}%" if total_findings > 0 else "0%",
+            '检测覆盖度': "全面",
+            '建议行动': "根据风险等级采取相应措施"
+        }
+    
+    def _generate_recommendations(self, findings: List[SimpleFinding]) -> List[str]:
+        """生成修复建议"""
+        recommendations = [
+            "立即处理高风险发现，特别是涉及凭证和个人信息的",
+            "对敏感信息进行加密存储和传输",
+            "实施访问控制，限制敏感信息的访问权限",
+            "定期进行安全扫描，及时发现和处理敏感信息泄露",
+            "对开发人员进行安全培训，提高安全意识",
+            "建立敏感信息管理流程，规范敏感信息的处理"
+        ]
+        
+        # 根据发现类型添加特定建议
+        finding_types = set(f.type for f in findings)
+        if 'api_key' in finding_types:
+            recommendations.append("检查API密钥的使用情况，确保密钥的安全存储和定期轮换")
+        if 'password' in finding_types:
+            recommendations.append("确保密码使用哈希存储，避免明文存储密码")
+        if 'id_card' in finding_types or 'phone' in finding_types:
+            recommendations.append("对个人信息进行脱敏处理，避免完整显示")
+        
+        return recommendations
     
     def _select_for_deep_analysis(self, findings: List[SimpleFinding]) -> List[Dict]:
         """选择需要深度分析的发现（模糊/高风险）"""
